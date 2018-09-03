@@ -1,0 +1,25 @@
+#!/bin/bash
+# Pre receive Git hook for server side repository of Python project. It uses
+# flake8 performing static analysis of python code. Based on
+# https://www.stavros.io/posts/pep8-git-hooks/.
+
+COMMAND='/usr/bin/python3.6 -m flake8 --config=/etc/flake8/.flake8'
+TEMPDIR=`mktemp -d`
+
+while read oldrev newrev refname; do
+    files=`git diff --name-only ${oldrev} ${newrev}`
+    for file in ${files}; do
+        object=`git ls-tree --full-name -r ${newrev} | egrep "(\s)${file}\$" | awk '{ print $3 }'`
+        if [ -z ${object} ]; then continue; fi
+        mkdir -p "${TEMPDIR}/`dirname ${file}`" &> /dev/null
+        git cat-file blob ${object} > ${TEMPDIR}/${file}
+    done;
+done
+
+# Change the filename here if your flake8 configuration
+# has a different name.
+${COMMAND} ${TEMPDIR}
+STATUS=$?
+rm -rf ${TEMPDIR} &> /dev/null
+echo status $STATUS
+exit ${STATUS}
