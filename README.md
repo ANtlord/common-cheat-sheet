@@ -23,3 +23,29 @@ Type cast to int
 ```sql
 fieldname::int
 ```
+Get indexes in a database
+```sql
+SELECT
+    tablename,
+    indexname,
+    indexdef
+FROM
+    pg_indexes
+WHERE
+    schemaname = 'public'
+ORDER BY
+    tablename,
+    indexname;
+```
+Get queries statistic against dbid
+```sql
+SELECT * FROM pg_stat_statements;
+```
+Get dbid of a table
+```sql
+SELECT oid, database_name FROM pg_database;
+```
+Get queries are being processed
+```sql
+SELECT * FROM pg_stat_activity;
+```
