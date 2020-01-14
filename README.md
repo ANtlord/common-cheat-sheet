@@ -49,3 +49,8 @@ Get queries are being processed
 ```sql
 SELECT * FROM pg_stat_activity;
 ```
+
+Get table grantees for a table
+```sql
+SELECT grantee, privilege_type FROM information_schema.role_table_grants WHERE table_name='mytable';
+```
