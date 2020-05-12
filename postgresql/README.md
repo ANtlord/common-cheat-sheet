@@ -1,5 +1,12 @@
 # Postgresql
 
+Some notes on Postgresql
+
+## Useful extension
+
+* TimescaleDB
+* Crosstab
+
 ## Management queries
 Change password for user postgres
 ```sql
