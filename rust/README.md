@@ -7,10 +7,10 @@ trait Wrap<T> {
 }
 
 impl<T, E> Wrap<T> for Result<T, E>
-    where E: Error
+    where E: Into<Box<dyn Error>> // to cover the trait bounded objects as well as trait objects.
 {
     fn wrap(self, value: &'static str) -> Result<T, Box<dyn Error>> {
-        self.map_err(|x| format!("{}: {}", &value, x).into())
+        self.map_err(|x| format!("{}: {}", &value, x.into()).into())
     }
 }
 
