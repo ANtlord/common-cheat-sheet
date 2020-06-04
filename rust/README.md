@@ -48,3 +48,68 @@ impl<T> Exit<T> for Option<T> {
     }
 }
 ```
+
+Impl limitation. If a structure holds some reference with a certain lifetime then it's impossible
+to have a method which returns `impl Trait` because the compiler can't infer proper lifetime. It raises
+```hidden type for `impl Trait` captures lifetime that does not appear in bounds```
+Return an arbitrary type instead of `impl Trait`. (Thread)[https://users.rust-lang.org/t/future-lifetime-bounds/43664/3]
+
+```rust
+trait Empty {
+    fn empty(&mut self);
+}
+
+struct Void(u8);
+struct VoidGet<'inner>(&'inner mut Void);
+struct VoidGetWrap<'a, 'b>(&'a mut VoidGet<'b>);
+
+impl<'a, 'b> Empty for VoidGetWrap<'a, 'b> {
+     fn empty(&mut self) {
+         let ref mut vg = self.0;
+         let ref mut v = vg.0;
+         v.0 = 0;
+     }
+}
+
+impl<'inner> VoidGet<'inner> {
+    fn wrap_self<'this>(&'this mut self) -> VoidGetWrap<'this, 'inner> {
+        VoidGetWrap(self)
+    }
+
+    // doesn't compile
+    // fn wrap_self<'this>(&'this mut self) -> impl Empty {
+    //     VoidGetWrap(self)
+    // }
+}
+```
+
+As a consequence you can't return `impl FnMut`. If you need it then you need to make a function which return the `FnMut`,
+the function expects a trait which your structure implements. The structure's lifetimes are hidden and compiler doesn't
+care about them.
+
+```rust
+trait Inc {
+    fn inc(&mut self);
+}
+
+impl<'inner> Inc for VoidGet<'inner> {
+    fn inc(&mut self) {
+        let ref mut v = self.0;
+        v.0 += 1;
+    }
+}
+
+fn inc_lazy<'a>(i: &'a mut impl Inc) -> impl FnMut() + '_ {
+    move || i.inc()
+}
+
+impl<'inner> VoidGet<'inner> {
+    // doesn't work
+    // fn inc_lazy<'this>(&'this mut self) -> impl FnMut() + 'this {
+    //     move || {
+    //         let ref mut v = self.0;
+    //         v.0 += 1;
+    //     }
+    // }
+}
+```
