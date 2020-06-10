@@ -55,6 +55,7 @@ How to get min and max of integers
 * min = 0
 * max = (1 << (bn - 1)) | (1 << (bn - 1) - 1) // 128 (b1000_0000) | 127 (b0111_1111)
 
-*byte*
+## byte
+
 * min = -1 - max(ubyte) / 2
 * max = min(byte) + max(ubyte)
