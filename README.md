@@ -43,3 +43,18 @@ Somehow gdb tries to get the magic path. Replace it:
 ```
 set substitute-path /rustc/4fb7144ed159f94491249e86d5bbd033b5d60550/src /src
 ```
+
+# MIN/MAX from scratch
+
+How to get min and max of integers
+
+## ubyte
+
+[0 .. 255], 256 cases, number of bits (bn) = 8, 256 = 2 ^ 8
+
+* min = 0
+* max = (1 << (bn - 1)) | (1 << (bn - 1) - 1) // 128 (b1000_0000) | 127 (b0111_1111)
+
+*byte*
+* min = -1 - max(ubyte) / 2
+* max = min(byte) + max(ubyte)
