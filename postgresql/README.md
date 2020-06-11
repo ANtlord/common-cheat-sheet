@@ -69,3 +69,19 @@ Type cast to int
 fieldname::int
 ```
 
+To get the last in a time range entry in some group. The example is getting the order of every user:
+```sql
+SELECT
+    orders.*
+FROM (
+    SELECT
+        user_id, MAX(created_at) AS created_at
+    FROM
+        orders
+    GROUP BY
+        user_id
+) AS latest_orders
+INNER JOIN orders
+    ON orders.user_id = latest_orders.user_id
+    AND orders.created_at = latest_orders.created_at
+```
