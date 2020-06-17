@@ -59,3 +59,11 @@ How to get min and max of integers
 
 * min = -1 - max(ubyte) / 2
 * max = min(byte) + max(ubyte)
+
+# Go randoms
+
+```
+rand.Seed(time.Now().UnixNano())
+rand.Float64() // [0; 1)
+rand.Int31n(n) // [0; n)
+```
