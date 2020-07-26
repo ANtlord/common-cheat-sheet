@@ -8,7 +8,7 @@ Note: keep in mind that the example uses self-signed certificate to provide SSL 
 
 ## Certification generation
 
-Note: before do anything install [Easy RSA](https://github.com/OpenVPN/easy-rsa)
+Note: before proceeding install [Easy RSA](https://github.com/OpenVPN/easy-rsa)
 
 Run `make` in `certs` directory to generate all of certificates. It asks you to type passwords and
 other date for certificates. Type the data carefully. Then run `docker-compose up` and check the
