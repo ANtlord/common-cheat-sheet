@@ -30,7 +30,7 @@ Run `make revoke` to revoke client1 certificate from `certs` folder then run
 
 ```bash
 curl --cert-type p12 \
-    --cert client1.p12:<password which type when exports the client certificate> \
+    --cert client1.p12:<password which is typed when p12 is exported the client certificate> \
     --cacert ./certs/pki/ca.crt \
     https://localhost:8090/
 ```
