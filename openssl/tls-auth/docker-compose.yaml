@@ -1,0 +1,10 @@
+version: '3'
+services:
+  nginx:
+    image: nginx
+    volumes:
+      - ./web:/web:rw,z
+      - ./certs:/certs:rw,z
+      - ./conf:/etc/nginx/conf.d:rw,z
+    ports:
+      - "8090:8090"

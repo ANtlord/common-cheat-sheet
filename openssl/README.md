@@ -10,7 +10,7 @@ Create a certificate for a localhost domain
 ```bash
 openssl genrsa -des3 -out rootCA.key 2048
 ```
-* Create a root certificate. it creates pem instead of CSR due to -x509
+* Create a root certificate. It creates pem instead of CSR (certificate signing request) due to -x509
 ```bash
 openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 1825 -out rootCA.pem
 ```
@@ -66,4 +66,6 @@ Certifincate structure is shown by `openssl x509 -text -in server.pem`
 - server verifies that it's able to decrypt it the encrypted message with the shared secret;
 - message are sent with the shared secret;
 
-TODO: see [tls client authorization](https://github.com/hyperium/tonic/blob/master/examples/src/tls_client_auth/)
+TODO: see [tls client authentication](https://github.com/hyperium/tonic/blob/master/examples/src/tls_client_auth/)
+
+Complete [example](./tls-auth) tls client authentication that it's done with NGINX as a server.
