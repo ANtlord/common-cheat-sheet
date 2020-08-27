@@ -67,3 +67,11 @@ rand.Seed(time.Now().UnixNano())
 rand.Float64() // [0; 1)
 rand.Int31n(n) // [0; n)
 ```
+
+# IPTABLES
+
+Open 123 port for a local network machine to have a TCP connection
+
+```
+iptables -t filter -A INPUT -s 192.168.1.0/24 -p tcp --dport 123 -j ACCEPT
+```
