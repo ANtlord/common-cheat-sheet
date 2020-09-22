@@ -85,3 +85,16 @@ INNER JOIN orders
     ON orders.user_id = latest_orders.user_id
     AND orders.created_at = latest_orders.created_at
 ```
+
+## Privileges management
+
+Be a super user
+
+```sql
+CREATE DATABASE app1
+REVOKE ALL ON DATABASE app1 from PUBLIC;
+CREATE ROLE app1grp;
+GRANT ALL ON DATABASE app1 TO app1grp;
+CREATE USER user1;
+GRANT ROLE app1grp TO user1;
+```
