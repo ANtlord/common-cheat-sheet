@@ -98,3 +98,18 @@ GRANT ALL ON DATABASE app1 TO app1grp;
 CREATE USER user1;
 GRANT ROLE app1grp TO user1;
 ```
+
+Give access to created tables and sequences;
+```sql
+GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO app1;
+GRANT ALL ON ALL TABLES IN SCHEMA public TO app1;
+```
+
+Give members of app1grp access to future tables and sequences created by migrator.
+```
+ALTER DEFAULT PRIVILEGES FOR ROLE migrator IN SCHEMA public GRANT ALL ON TABLES TO app1grp;
+ALTER DEFAULT PRIVILEGES FOR ROLE migrator IN SCHEMA public GRANT ALL ON SEQUENCES TO app1grp;
+```
+
+**Note:** the tables which are created by migrator should be created with explicit designation of the role.
+If migrator is a role rather than user then creating a table should be after `SET ROLE migrator;`.
