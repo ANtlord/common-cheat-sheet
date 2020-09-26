@@ -75,3 +75,40 @@ Open 123 port for a local network machine to have a TCP connection
 ```
 iptables -t filter -A INPUT -s 192.168.1.0/24 -p tcp --dport 123 -j ACCEPT
 ```
+
+# Extend disk
+
+Extend a partition
+
+* open cfdisk
+* choose the last partition (resizing a partition in the middle is not straighforward)
+* resize as much as possible and write
+
+Extend an ext4 filesystem
+```
+e2fsck -f /dev/sdb1
+resize2fs /dev/sdb1
+```
+
+# LVM
+
+## Create a partition and a filesystem.
+
+* make a partition an LVM partition (can be done in cfdisk)
+
+```
+pvcreate /dev/sdb1
+vgcreate app1data /dev/sdb1
+lvcreate --name app1data_lv1 --size 1G app1data
+mkfs.ext4 /dev/app1data/app1data_lv1
+```
+
+## Extend the filesystem with another disk.
+
+* make a partition an LVM partition (can be done in cfdisk)
+```
+pvcreate /dev/sdb1
+vgextend app1data /dev/sdc1
+lvextend -L1.5G /dev/app1data/app1data_lv1
+resize2fs /dev/app1data/app1data_lv1
+```
