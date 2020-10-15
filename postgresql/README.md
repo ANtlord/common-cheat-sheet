@@ -58,6 +58,11 @@ Get table grantees for a table
 SELECT grantee, privilege_type FROM information_schema.role_table_grants WHERE table_name='mytable';
 ```
 
+Kill a request
+```sql
+SELECT pg_cancel_backend(<pid of process>);
+```
+
 ## Rare basic operations
 Substring of field from second symbold to end.
 ```sql
@@ -86,6 +91,18 @@ INNER JOIN orders
     AND orders.created_at = latest_orders.created_at
 ```
 
+Get running amount and difference between current and previous rows. Use windows functions.
+```sql
+SELECT
+    user_id,
+    created_at,
+    amount,
+    sum(amount) OVER (PARTITION BY user_id ORDER BY created_at),
+    amount - (lag(amount, 1) OVER (PARTITION BY user_id ORDER BY created_at)
+FROM rewards
+ORDER BY created_at
+```
+
 ## Privileges management
 
 Be a super user
@@ -101,8 +118,8 @@ GRANT ROLE app1grp TO user1;
 
 Give access to created tables and sequences;
 ```sql
-GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO app1;
-GRANT ALL ON ALL TABLES IN SCHEMA public TO app1;
+GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO app1grp;
+GRANT ALL ON ALL TABLES IN SCHEMA public TO app1grp;
 ```
 
 Give members of app1grp access to future tables and sequences created by migrator.
