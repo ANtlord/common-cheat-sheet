@@ -112,3 +112,13 @@ vgextend app1data /dev/sdc1
 lvextend -L1.5G /dev/app1data/app1data_lv1
 resize2fs /dev/app1data/app1data_lv1
 ```
+
+# Git
+
+## Dump commits in CSV.
+
+```
+git log --pretty=format:%h,%an,%s --all --since=2020-11-01 --until=2020-11-17 --author=antlord92@gmail.com
+```
+
+Details of format are in `git log --help` and find `format:<string>` in the manual page.
