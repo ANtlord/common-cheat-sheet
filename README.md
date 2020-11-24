@@ -76,6 +76,15 @@ Open 123 port for a local network machine to have a TCP connection
 iptables -t filter -A INPUT -s 192.168.1.0/24 -p tcp --dport 123 -j ACCEPT
 ```
 
+Port forwarding consists of substitions destination and source. Destination is changed
+to redirect a package.  Source is changed in order to prevend direct sending a package
+to its original source as the original source doesn't know about machine behind firewall.
+
+```
+iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 12345 -j DNAT --to-destination 10.0.0.2 # substitude destination
+iptables -t nat -A POSTROUTING -o eth1 -p tcp --dport 12345 -d 10.0.0.2 -j SNAT --to-source 10.0.0.1 # substitude source
+```
+
 # Extend disk
 
 Extend a partition
