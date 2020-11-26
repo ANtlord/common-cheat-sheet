@@ -85,6 +85,29 @@ iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 12345 -j DNAT --to-destinat
 iptables -t nat -A POSTROUTING -o eth1 -p tcp --dport 12345 -d 10.0.0.2 -j SNAT --to-source 10.0.0.1 # substitude source
 ```
 
+NOTE: ping doesn't work in the case of traffic passes only for tcp. To ping enable icmp protocol.
+
+If the port forwarding is used to have a computer work as a router then use
+
+```
+----------------      ---------------------------      ----------------
+| LAN computer | ---> |           router        | ---> | WAN computer |
+----------------      ---------------------------      ----------------
+                      |     eth1    ->   eth0   |
+                      | 192.168.0.1    10.0.2.3 |
+                      ---------------------------                      
+
+
+iptables -t nat -A POSTROUTING -o eth0 -j SNAT --to-source <10.0.2.3> # substitude source
+```
+
+NOTE: in order to route traffic you need to have properly configure `ip route`
+
+If an IP address of the node the traffic pass through is dynamic then use
+```
+iptables -t nat -A POSTROUTING -o eth1 MASQUERADE
+```
+
 # Extend disk
 
 Extend a partition
