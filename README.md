@@ -77,8 +77,8 @@ iptables -t filter -A INPUT -s 192.168.1.0/24 -p tcp --dport 123 -j ACCEPT
 ```
 
 Port forwarding consists of substitions destination and source. Destination is changed
-to redirect a package.  Source is changed in order to prevend direct sending a package
-to its original source as the original source doesn't know about machine behind firewall.
+to redirect a package.  Source is changed in order to prevent the computer behind the firewall send a package
+directly to the original source as the original source doesn't know about the computer behind firewall.
 
 ```
 iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 12345 -j DNAT --to-destination 10.0.0.2 # substitude destination
