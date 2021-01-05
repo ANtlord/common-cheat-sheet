@@ -154,3 +154,9 @@ git log --pretty=format:%h,%an,%s --all --since=2020-11-01 --until=2020-11-17 --
 ```
 
 Details of format are in `git log --help` and find `format:<string>` in the manual page.
+
+# Regular expressions (regex)
+
+Problem: build regular expression for a binary number multiple of 3.
+(https://stackoverflow.com/a/867576)[Here] is a solution with an explanation.
+The idea of the problem is drawing the automata and eliminating middle states. 
