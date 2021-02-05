@@ -105,8 +105,13 @@ NOTE: in order to route traffic you need to have properly configure `ip route`
 
 If an IP address of the node the traffic pass through is dynamic then use
 ```
-iptables -t nat -A POSTROUTING -o eth1 MASQUERADE
+iptables -t nat -A POSTROUTING -o eth1 -j MASQUERADE
 ```
+
+Another way to response without substition of source address is
+
+ip r add target via gateway
+ip r add 10.31.0.0/16 via 10.33.0.14
 
 # Extend disk
 
@@ -160,3 +165,9 @@ Details of format are in `git log --help` and find `format:<string>` in the manu
 Problem: build regular expression for a binary number multiple of 3.
 (https://stackoverflow.com/a/867576)[Here] is a solution with an explanation.
 The idea of the problem is drawing the automata and eliminating middle states. 
+
+# Salt
+Clean up old minions: `/usr/bin/salt-run manage.down removekeys=True`
+Run a script `salt '<host>' cmd.script salt://scripts/runme.sh`
+Set grain: `salt '<host>' grains.setval '<key>' '<val>'`
+Set roles: `salt '<host>' grains.setval roles "['ton-zz']"`
