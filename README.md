@@ -125,4 +125,4 @@ The idea of the problem is drawing the automata and eliminating middle states.
 Clean up old minions: `/usr/bin/salt-run manage.down removekeys=True`
 Run a script `salt '<host>' cmd.script salt://scripts/runme.sh`
 Set grain: `salt '<host>' grains.setval '<key>' '<val>'`
-Set roles: `salt '<host>' grains.setval roles "['ton-zz']"`
+Set roles: `salt '<host>' grains.setval roles "['certain-role']"`
