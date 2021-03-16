@@ -122,16 +122,31 @@ Problem: build regular expression for a binary number multiple of 3.
 The idea of the problem is drawing the automata and eliminating middle states. 
 
 # Salt
-Clean up old minions: `/usr/bin/salt-run manage.down removekeys=True`
+Clean up old minions: `salt-run manage.down removekeys=True`
 Run a script `salt '<host>' cmd.script salt://scripts/runme.sh`
 Set grain: `salt '<host>' grains.setval '<key>' '<val>'`
 Set roles: `salt '<host>' grains.setval roles "['certain-role']"`
 
 # Graphite
-To send data to graphite from bash `echo 'path.to.metric value|g' > /dev/udb/localhost/port`
+To send data to graphite from bash `echo 'path.to.metric:value|g' > /dev/udb/localhost/port`
 
 # Syscalls
 Possible subjects: NASM, Linux, Assembly, Syscalls
 How to get a list of syscalls:
 - `man 2 syscalls` there should be a path to file where they are defined (currently: /usr/include/asm/unistd.h)
 - The file is split into two parts: 64bit (/usr/include/asm/unistd_64.h) and 32bit: (/usr/include/asm/unistd_32.h)
+
+# Systemd unit
+```
+[Unit]
+Description=Src daemon
+After=network.target
+
+[Service]
+Restart=always
+ExecStart=/path/to/exe
+
+[Install]
+WantedBy=multi-user.target
+Alias=src.service
+```

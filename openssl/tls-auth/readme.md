@@ -10,9 +10,10 @@ Note: keep in mind that the example uses self-signed certificate to provide SSL 
 
 Note: before proceeding install [Easy RSA](https://github.com/OpenVPN/easy-rsa)
 
-Run `make` in `certs` directory to generate all of certificates. It asks you to type passwords and
-other date for certificates. Type the data carefully. Then run `docker-compose up` and check the
-connection. Run the next commands staying in the root of the project.
+Run `make` in `certs` directory to generate all required certificates. It asks
+you to type passwords and other data for the certificates. Type the data
+carefully.  Then run `docker-compose up` and check the connection. Run the next
+commands staying in the root of the project.
 
 ```bash
 curl --cacert ./certs/pki/ca.crt https://localhost:8090/  # access denied
@@ -35,4 +36,4 @@ curl --cert-type p12 \
     https://localhost:8090/
 ```
 
-and get 400 response. That means that you are unable to get URL with the certificate.
+then get 400 response. That means that you are unable to get URL with the certificate.

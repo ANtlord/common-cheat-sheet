@@ -113,7 +113,7 @@ REVOKE ALL ON DATABASE app1 from PUBLIC;
 CREATE ROLE app1grp;
 GRANT ALL ON DATABASE app1 TO app1grp;
 CREATE USER user1;
-GRANT ROLE app1grp TO user1;
+GRANT app1grp TO user1; # grant role
 ```
 
 Give access to created tables and sequences;
