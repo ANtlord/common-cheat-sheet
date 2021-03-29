@@ -1,0 +1,25 @@
+digraph {
+    edge [fontname="sans" fontsize="9"]
+    node [fontname="sans" fontsize="11"]
+
+    subgraph cluster_0 {
+        label = "Workstation 1"
+        ws1eth0 [label="eth0 10.32.0.1/24"]
+    }
+
+    subgraph cluster_2 {
+        label = Router
+        r1eth0 [label="eth0 10.32.0.254/24"]
+        r1eth1 [label="eth1=(5.9.5.1/26, 5.9.5.2/26)"]
+    }
+
+    subgraph cluster_1 {
+        label = "Workstation 2"
+        ws2eth0 [label="eth0 10.32.0.2/24"]
+    }
+
+    ws1eth0 -> r1eth0 [label="(1) dst = 5.9.5.2\nsrc = 10.32.0.1"]
+    r1eth0 -> ws2eth0 [label="(2) dst = 10.32.0.2\nsrc = 5.9.5.1"]
+    ws2eth0 -> r1eth0 [label="(3) dst = 5.9.5.1\nsrc = 10.32.0.2"]
+    r1eth0 -> ws1eth0 [label="(4) dst = 10.32.0.1\nsrc = 5.9.5.2"]
+}

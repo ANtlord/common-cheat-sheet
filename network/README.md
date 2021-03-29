@@ -72,3 +72,44 @@ Result: you are able do `telnet 192.168.56.1 1234` on the LAN computer
 ```
 tcpdump -n -i enp0s3 port 1234
 ```
+
+## Reaching a computer from its neighbour by its external address.
+
+A router has two public IP addresses. Each one dedicated to respective internal
+workstation. If workstation 1 sends a package to workstation 2 by its public
+address then the package is dropped at their router as the router is an actual
+receiver of the package as the address is bound to its network interface.
+
+To prevent the dropping change desitination address of a package at the router
+which is the public address by the internal address of the workstation 2. Then
+workstation 2 receives a package and sends a package in response. Destination
+of the is internal address of workstation 1. The package is sent directly as
+the workstations are in the same network so the source of the package is
+internal address which was substituded at the router. Workstation 1 drops the
+package as it doesn't wait a package from the internal address of workstation 2.
+
+To prevent the dropping workstation 2 should send a package back to the router.
+That means that source of the package should be changed as well to the public
+address of workstation 1. A package is sent to the router then it is sent to
+workstation 1.
+
+Scheme is [here](./inner_by_outer_ip.dot)
+
+NOTE: this is an adhoc solution. Such problem should be resolved with routing
+policies (ip rule)
+
+Router iptables:
+
+```
+# usual NAT to forward packages from public network to a certain machine
+iptables -t nat -A PREROUTING -i eth1 -j DNAT --destination=5.9.5.2 --dport=80 --to-destination=10.32.0.2
+iptables -t nat -A PREROUTING -i eth1 -j DNAT --destination=5.9.5.1 --dport=80 --to-destination=10.32.0.1
+iptables -t nat -A POSTROUTING -o eth1 -j SNAT --source=10.32.0.1 --to-source=5.9.5.1
+iptables -t nat -A POSTROUTING -o eth1 -j SNAT --source=10.32.0.2 --to-source=5.9.5.2
+
+# internal communications
+iptables -t nat -A PREROUTING -i eth0 -j DNAT --destination=5.9.5.1 --dport=80 --to-destination=10.32.0.1
+iptables -t nat -A PREROUTING -i eth0 -j DNAT --destination=5.9.5.2 --dport=80 --to-destination=10.32.0.2
+iptables -t nat -A POSTROUTING -o eth0 -j SNAT --source=10.32.0.1 --to-source=5.9.5.1
+iptables -t nat -A POSTROUTING -o eth0 -j SNAT --source=10.32.0.2 --to-source=5.9.5.2
+```
