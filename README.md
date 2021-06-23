@@ -60,14 +60,6 @@ How to get min and max of integers
 * min = -1 - max(ubyte) / 2
 * max = min(byte) + max(ubyte)
 
-# Go randoms
-
-```
-rand.Seed(time.Now().UnixNano())
-rand.Float64() // [0; 1)
-rand.Int31n(n) // [0; n)
-```
-
 # Extend disk
 
 Extend a partition
@@ -98,6 +90,7 @@ mkfs.ext4 /dev/app1data/app1data_lv1
 ## Extend the filesystem with another disk.
 
 * make a partition an LVM partition (can be done in cfdisk)
+
 ```
 pvcreate /dev/sdb1
 vgextend app1data /dev/sdc1
@@ -114,6 +107,18 @@ git log --pretty=format:%h,%an,%s --all --since=2020-11-01 --until=2020-11-17 --
 ```
 
 Details of format are in `git log --help` and find `format:<string>` in the manual page.
+
+## Designate certain SSH identity
+
+```
+git config --local core.sshCommand "/usr/bin/ssh -i /home/me/.ssh/id_rsa_foo"
+```
+
+```
+git clone <address> --config core.sshCommand "/usr/bin/ssh -i /home/me/.ssh/id_rsa_foo"
+```
+
+
 
 # Regular expressions (regex)
 
@@ -149,4 +154,32 @@ ExecStart=/path/to/exe
 [Install]
 WantedBy=multi-user.target
 Alias=src.service
+```
+
+# Bash 
+
+## Invoking an ssh command stored in a variable
+
+```bash
+local SSH=(ssh root@$TARGET -o ProxyCommand="ssh -W %h:%p -q root@$PROXY" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null)
+"${SSH[@]}" "cat /etc/hostname"
+```
+
+## Compute how many space some files take
+
+```bash
+du -ks $(find -name 'pattern') | awk '{sum+=$1} END {print sum}'
+```
+
+# Add a user
+
+```
+useradd -m -G  users -s /bin/bash antlord
+```
+
+
+# Add sudo
+
+```
+echo 'antlord ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/90-antlord
 ```

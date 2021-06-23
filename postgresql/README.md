@@ -9,11 +9,13 @@ Some notes on Postgresql
 
 ## Management queries
 Change password for user postgres
+
 ```sql
 ALTER ROLE postgres WITH PASSWORD 'password';
 ```
 
 Get indexes in a database
+
 ```sql
 SELECT
     tablename,
@@ -28,53 +30,76 @@ ORDER BY
     indexname;
 ```
 
-Get columnts of a table
+Get columns of a table
+
 ```sql
-SELECT * FROM information_schema.columns WHERE table_schema = 'schema' AND table_name = 'mytable';
+SELECT * FROM information_schema.columns 
+WHERE table_schema = 'schema' AND table_name = 'mytable';
 ```
 
 Get constraints of a table
+
 ```sql
-SELECT * FROM pg_constraint WHERE conrelid = (SELECT 'schema.mytable'::regclass::oid);
+SELECT * FROM pg_constraint
+WHERE conrelid = (SELECT 'schema.mytable'::regclass::oid);
 ```
 
 Get queries statistic against dbid
+
 ```sql
 SELECT * FROM pg_stat_statements;
 ```
 
 Get dbid of a database
+
 ```sql
 SELECT oid, datname FROM pg_database;
 ```
 
 Get queries are being processed
+
 ```sql
 SELECT * FROM pg_stat_activity;
 ```
 
 Get table grantees for a table
+
 ```sql
-SELECT grantee, privilege_type FROM information_schema.role_table_grants WHERE table_name='mytable';
+SELECT grantee, privilege_type
+FROM information_schema.role_table_grants WHERE table_name='mytable';
 ```
 
 Kill a request
+
 ```sql
 SELECT pg_cancel_backend(<pid of process>);
 ```
 
+Get a user's groups
+
+```sql
+select rolname from pg_user
+join pg_auth_members on (pg_user.usesysid=pg_auth_members.member)
+join pg_roles on (pg_roles.oid=pg_auth_members.roleid)
+where
+pg_user.usename='app1user1';
+```
+
 ## Rare basic operations
 Substring of field from second symbold to end.
+
 ```sql
 substring(fieldname, 2, length(fieldname)-1)
 ```
 
 Type cast to int
+
 ```sql
 fieldname::int
 ```
 
 To get the last in a time range entry in some group. The example is getting the order of every user:
+
 ```sql
 SELECT
     orders.*
@@ -92,6 +117,7 @@ INNER JOIN orders
 ```
 
 Get running amount and difference between current and previous rows. Use windows functions.
+
 ```sql
 SELECT
     user_id,
@@ -117,12 +143,15 @@ GRANT app1grp TO user1; # grant role
 ```
 
 Give access to created tables and sequences;
+
 ```sql
 GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO app1grp;
 GRANT ALL ON ALL TABLES IN SCHEMA public TO app1grp;
 ```
 
 Give members of app1grp access to future tables and sequences created by migrator.
+Run it being connected to the **target** database;
+
 ```
 ALTER DEFAULT PRIVILEGES FOR ROLE migrator IN SCHEMA public GRANT ALL ON TABLES TO app1grp;
 ALTER DEFAULT PRIVILEGES FOR ROLE migrator IN SCHEMA public GRANT ALL ON SEQUENCES TO app1grp;
@@ -130,3 +159,10 @@ ALTER DEFAULT PRIVILEGES FOR ROLE migrator IN SCHEMA public GRANT ALL ON SEQUENC
 
 **Note:** the tables which are created by migrator should be created with explicit designation of the role.
 If migrator is a role rather than user then creating a table should be after `SET ROLE migrator;`.
+
+**Note:** users of database `app1` have access to all tables of the database
+because the tables are created by `migrator` role. That means that `migrator`
+must create tables only in one database to prevent undesired access.
+
+**Note:** You can keep one user `migrator` but maintain a role per a database
+for the user.

@@ -71,7 +71,16 @@ Result: you are able do `telnet 192.168.56.1 1234` on the LAN computer
 
 ```
 tcpdump -n -i enp0s3 port 1234
+tcpdump -i <interface> -s 65535 -w <some-file>
 ```
+
+Befores expected rule put
+
+```
+iptables <proper options> -j LOG --log-level info
+```
+
+than see `/var/log/kern.log`
 
 ## Reaching a computer from its neighbour by its external address.
 
@@ -113,3 +122,4 @@ iptables -t nat -A PREROUTING -i eth0 -j DNAT --destination=5.9.5.2 --dport=80 -
 iptables -t nat -A POSTROUTING -o eth0 -j SNAT --source=10.32.0.1 --to-source=5.9.5.1
 iptables -t nat -A POSTROUTING -o eth0 -j SNAT --source=10.32.0.2 --to-source=5.9.5.2
 ```
+
