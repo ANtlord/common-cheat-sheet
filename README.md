@@ -183,3 +183,19 @@ useradd -m -G  users -s /bin/bash antlord
 ```
 echo 'antlord ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/90-antlord
 ```
+
+# TAR
+
+## unpack a designated file without parent directories
+
+In this case foo folder is removed so bar.csv is unpacked to the current folder
+
+```
+tar xf ./archive.tar --xform='s,foo/bar.csv,bar.csv,' ./foo/bar.csv
+```
+
+In this case all parent folders are removed so only bar.csv is unpacked to the current folder
+
+```
+tar xf ./archive.tar --xform='s,.*/,,' ./project/data/products.csv
+```

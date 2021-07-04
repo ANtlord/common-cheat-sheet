@@ -54,17 +54,21 @@ ssl_certificate_key server.key;
 
 Certifincate structure is shown by `openssl x509 -text -in server.pem`
 
-## Handshake algorithm
+## Handshake RSA exchange algorithm
 
-- client sends his tech data: the highest TLS version, supported ciphers, supported compression method, a random number;
-- server sends chosen TLS version, cipher, compression method and a random number;
-- server sends his public key within his certificate;
-- client verifies it asking a certificater authrority. (in order to trust to self signed certificate provide rootCA.pem to the client);
-- client creates pre-master key and sends ie to server encrypted with public key from the public certificate of the server;
-- client and server generates shared secret on top of the random numbers;
-- client sends an encrypted message with the shared secret;
-- server verifies that it's able to decrypt it the encrypted message with the shared secret;
-- message are sent with the shared secret;
+- client sends his tech data: the highest TLS version, supported ciphers, supported compression
+  method, a random string;
+- server sends chosen TLS version, cipher, compression method, a random string, its public key
+  within his certificate;
+- client verifies the certificate asking the certificate authrority which issued the server's
+  certificate. (in order to trust to self signed certificate provide rootCA.pem to the client);
+- client creates pre-master key, encrypts it with the public key from the certificate of the server
+  and sends it to the server;
+- client and server generate a session key from the random strings and the pre-master key. They must
+  get the same session key;
+- client sends an encrypted with the session key "finish" message;
+- server verifies that it's able to decrypt it the encrypted message with the session key;
+- Handshake is done. Communication continues with the symmetric encryption with the session key;
 
 TODO: see [tls client authentication](https://github.com/hyperium/tonic/blob/master/examples/src/tls_client_auth/)
 
