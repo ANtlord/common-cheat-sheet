@@ -177,3 +177,37 @@ In this case all parent folders are removed so only bar.csv is unpacked to the c
 ```
 tar xf ./archive.tar --xform='s,.*/,,' ./project/data/products.csv
 ```
+
+# Fedora
+
+## DNF
+
+Create your own local repository
+
+```bash
+dnf install createrepo
+createrepo ./path
+dnf config-manager --add-repo=/local/path/to/whatever
+```
+
+Disable repo
+
+```bash
+dnf repolist # shows repos with their ids
+dnf config-manager --set-disabed=<id>
+```
+
+Drop repo
+
+```bash
+rm /etc/yum.repos.d/<desired_repo>
+```
+
+Offline package installation. It's better to create a folder for a package and
+download all dependencies. In order to install the target package and its
+dependencies from the local folder use `*`.
+
+```bash
+dnf download --destdir=<destination> --resolve <desired_package>
+dnf install <destination>/*
+```

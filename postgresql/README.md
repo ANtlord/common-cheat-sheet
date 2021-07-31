@@ -166,3 +166,11 @@ must create tables only in one database to prevent undesired access.
 
 **Note:** You can keep one user `migrator` but maintain a role per a database
 for the user.
+
+## Sequences
+
+Get the last value of sequence without its mutation
+
+```sql
+SELECT last_value FROM lite_server_id_seq;
+```
