@@ -8,6 +8,14 @@ Some notes on Postgresql
 * Crosstab
 
 ## Management queries
+
+Reload configuration. It doesn't work for shared_buffers.
+
+```sql
+SELECT pg_reload_conf();
+```
+
+
 Change password for user postgres
 
 ```sql
@@ -60,6 +68,19 @@ Get queries are being processed
 
 ```sql
 SELECT * FROM pg_stat_activity;
+```
+
+Get index usage
+
+```sql
+SELECT * FROM pg_stat_all_indexes
+```
+
+Get IO for indexes, tables
+
+```sql
+select * from pg_statio_user_tables where relname ='your_table';
+select * from pg_statio_all_indexes where relname ='your_table';
 ```
 
 Get table grantees for a table
