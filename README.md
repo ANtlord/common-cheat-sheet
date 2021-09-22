@@ -105,13 +105,25 @@ Problem: build regular expression for a binary number multiple of 3.
 The idea of the problem is drawing the automata and eliminating middle states. 
 
 # Salt
-Clean up old minions: `salt-run manage.down removekeys=True`
-Run a script `salt '<host>' cmd.script salt://scripts/runme.sh`
-Set grain: `salt '<host>' grains.setval '<key>' '<val>'`
-Set roles: `salt '<host>' grains.setval roles "['certain-role']"`
+
+- Clean up old minions: `salt-run manage.down removekeys=True`
+- Run a script `salt '<host>' cmd.script salt://scripts/runme.sh`
+- Set grain: `salt '<host>' grains.setval '<key>' '<val>'`
+- Set roles: `salt '<host>' grains.setval roles "['certain-role']"`
 
 # Graphite
 To send data to graphite from bash `echo 'path.to.metric:value|g' > /dev/udb/localhost/port`
+
+To send historical data
+
+```bash
+# timestamp = date +%s
+# usual port for plain text protocol
+
+cat ./data.txt | while read -r line; do
+    echo stats.gauges.test.metric1.value <value> <timestamp> | nc <HOST> 2003
+done
+```
 
 # Syscalls
 Possible subjects: NASM, Linux, Assembly, Syscalls
@@ -135,6 +147,14 @@ Alias=src.service
 ```
 
 # Bash 
+
+## Read file line by line
+
+```bash
+cat ./data.txt | while read -r line; do
+    echo $line
+done
+```
 
 ## Invoking an ssh command stored in a variable
 
@@ -210,4 +230,25 @@ dependencies from the local folder use `*`.
 ```bash
 dnf download --destdir=<destination> --resolve <desired_package>
 dnf install <destination>/*
+```
+
+# Vim
+
+To fitler quickfix list use cfilter `:he cfilter`
+
+# Wget
+
+Download an entire site
+
+```
+wget \
+     --recursive \
+     --no-clobber \
+     --page-requisites \
+     --html-extension \
+     --convert-links \
+     --restrict-file-names=windows \
+     --domains website.org \
+     --no-parent \
+         www.website.org/tutorials/html/
 ```
