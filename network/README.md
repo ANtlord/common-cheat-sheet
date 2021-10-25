@@ -123,3 +123,8 @@ iptables -t nat -A POSTROUTING -o eth0 -j SNAT --source=10.32.0.1 --to-source=5.
 iptables -t nat -A POSTROUTING -o eth0 -j SNAT --source=10.32.0.2 --to-source=5.9.5.2
 ```
 
+## Tools to monitor traffic
+
+- iptraf-ng
+- nethogs
+- iftop
